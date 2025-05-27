@@ -59,7 +59,7 @@ def select_role(world):
     
 
 while True:
-    world1 = input("V jakém světě chcete bojovat?", worlds)
+    world1 = input(f"V jakém světě chcete bojovat {worlds}?")
     if world1 not in worlds:
         print("Tento svět není v nabídce.")
         continue
@@ -81,3 +81,8 @@ while True:
     print(f"Your opponent is: {enemy_to_fight.name} ({enemy_to_fight.rasa}), Health: {enemy_to_fight.health}")
 
     break
+
+print(f"Battle beggings!\n Your opponent is: {enemy_to_fight.name} ({enemy_to_fight.rasa}), Health: {enemy_to_fight.health}")
+
+while True:
+    
