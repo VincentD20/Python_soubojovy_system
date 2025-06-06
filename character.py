@@ -11,10 +11,16 @@ class Character:
 
 
     def attack(self, enemy):
-        enemy.health -= self.damage
-        print(f"{self.name} attacks {enemy.name} for {self.damage} damage!")
+        dmg = random.randint(*self.attack_range) + self.damage
+        enemy.health -= dmg
+        print(f"{self.name} attacks {enemy.name} for {dmg} damage!")
     
-    def defence(self):
+    def heal(self):
+        heal_amount = random.randint(10, 25)
+        self.health += heal_amount
+        print(f"self.name heals for {heal_amount}. Current health: {self.health}")
+    
+    def parry(self, damage_taken):
         kostka = int(input(f"Parry the attack (guess the number - 1 to 20):"))
         number = random.randint(1, 20)
         if kostka == number:
@@ -25,3 +31,14 @@ class Character:
                 damage_taken = 0
             self.health -= damage_taken
             print(f"The enemy hit you. You took {damage_taken} damage. Your health: {self.health}")
+
+    def dodge(self):
+        chance = random.randint(1, 100)
+        if chance <= 30:
+            print(f"{self.name} you dodged the attack!")
+            return True
+        else:
+            print(f"{self.name} failed to dodge.")
+            return False
+    
+

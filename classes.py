@@ -1,10 +1,15 @@
+from character import Character
 
-class Fantasy:
+class Fantasy: 
     class Mage(Character):
-        def __init__(self, name, race, health, attack_range, mana, defense, damage):
-            super().__init__(name, race, health, attack_range, defense, damage)
+        def __init__(self, name, race):
+            health = 200
+            attack_range = 20
+            defence = 5
+            damage = 25
+            mana = 100
+            super().__init__(name, race, health, attack_range, defence, damage)
             self.mana = mana
-            self.magic = ["Fire", "Ice", "Water", "Poison"]
 
         def cast_spell(self, enemy, spell):
             if spell not in self.magic:
@@ -18,37 +23,42 @@ class Fantasy:
             enemy.health -= spell_damage
             self.mana -= 10
 
-
     class Warrior(Character):
-        def __init__(self, name, race, health, attack_range, defense, damage):
-            super().__init__(name, race, health, attack_range, defense, damage)
-            self.weapon = ["Sword", "Greatsword", "Axe", "Battleaxe", "Dagger", "Spear", "Warhammer", "Katana"]
+        def __init__(self, name, race):
+            health = 400
+            attack_range = 2
+            defence = 20
+            damage = 40
+            super().__init__(name, race, health, attack_range, defence, damage)
 
     class Archer(Character):
-        def __init__(self, name, race, health, attack_range, defense, damage):
-            super().__init__(name, race, health, attack_range, defense, damage)
-            self.weapon = ["Bow", "Crossbow", "Slingshooter"]
-            self.attachment = ["Fire", "Poison", "None", "Explosive"]
+        def __init__(self, name, race):
+            health = 250
+            attack_range = 50
+            defence = 10
+            damage = 60
+            super().__init__(name, race, health, attack_range, defence, damage)
+            
 
 class Scifi:
     class Power(Character):
-        def __init__(self, name, race, health, attack_range, defense, damage):
-            super().__init__(name, race, health, attack_range, defense, damage)
+        def __init__(self, name, race, health, attack_range, defence, damage):
+            super().__init__(name, race, health, attack_range, defence, damage)
             self.side = ["Dark", "Light"]
             self.color = ["Blue", "Red", "White", "Yellow", "Purple"]
 
     class Mandalorian(Character):
-        def __init__(self, name, race, health, attack_range, defense, damage):
-            super().__init__(name, race, health, attack_range, defense, damage)
-            self.weapon = []
+        def __init__(self, name, race, health, attack_range, defence, damage):
+            super().__init__(name, race, health, attack_range, defence, damage)
 
     class Trooper(Character):
-        def __init__(self, name, race, health, attack_range, defense, damage):
-            super().__init__(name, race, health, attack_range, defense, damage)
+        def __init__(self, name, race, health, attack_range, defence, damage):
+            super().__init__(name, race, health, attack_range, defence, damage)
 
 class ModernWorld:
     class Soldier(Character):
-        def __init__(self, name, race, health, attack_range, defense, damage):
-            super().__init__(name, race, health)
-            super().__init__(name, race, health, attack_range, defense, damage)
-            self.weapon = ["Sniper", "Pistol", "Light-machine-gun", "Submachine-gun", "Rifle", "Shotgun", "Hands"]
+        def __init__(self, name, race, health, attack_range, defence, damage):
+            super().__init__(name, race, health, attack_range, defence, damage)
+    class Sniper(Character):
+        def __init__(self, name, race, health, attack_range, defence, damage):
+            super().__init__(name, race, health, attack_range, defence, damage)
