@@ -1,11 +1,11 @@
 from character import *
 from classes import *
 import random
+import time
 
 worlds = ["Sci-fi", "Fantasy", "Modern world"]
 
-
-def enemy(world):
+def get_enemies(world):
     if world == "Sci-fi":
         return [
             Character("Darth Vader", "Human", 1000, (10, 20), 10, 50),
@@ -52,81 +52,116 @@ def select_role(world):
         }
     
     while True:
-        role = input(f"Which role do you want in {world}: {list(roles.keys())}")
+        role = input(f"Which role do you want in {world}: {list(roles.keys())} ")
         if role in roles:
             return roles[role]
         else:
             print("Invalid role. Please select from list.")
 
-
 def player_turn(player, enemy):
-    print("\nChoose your action:")
+    print(f"\n{player.name} - Choose your action:")
     print("1 - Attack")
     print("2 - Special Attack")
     print("3 - Heal")
-    print("4 - Parry")
-    print("5 - Dodge")
 
     choice = input("Your choice: ")
     if choice == "1":
         player.attack(enemy)
+        time.sleep(1)
     elif choice == "2":
-        player.special_attack(enemy)
+        if hasattr(player, "special_attack"):
+            player.special_attack(enemy)
+        else:
+            print("No special attack available.")
+        time.sleep(1)
     elif choice == "3":
         player.heal()
-    elif choice == "4":
-        player.parry()
-    elif choice == "5":
-        if player.dodge():
-            return True  
+        time.sleep(1)
     else:
         print("Invalid choice.")
-    return False
+        time.sleep(1)
 
 def enemy_turn(enemy, player):
     print(f"\n{enemy.name}'s turn:")
-    enemy.attack(player)
-    player.take_damage(enemy)
+
+    actions = ["attack", "special_attack", "heal"]
+
+    while True:
+        action = random.choice(actions)
+
+        if action == "attack":
+            print(f"{player.name}, you are about to be attacked! Choose your defense: ")
+            print("1 - Parry (chance to counterattack)")
+            print("2 - Dodge (chance to avoid attack)")
+
+            choice = input("Your choice: ")
+            if choice == "1":
+                if player.parry(): 
+                    print(f"{player.name} parried successfully and counterattacks! Health: {player.health}")
+                    player.attack(enemy)
+                else:
+                    enemy.attack(player)
+                    print(f"{player.name} failed to parry.")
+                    enemy.attack(player)
+
+            elif choice == "2":
+                if player.dodge():
+                    print(f"{player.name} dodged the attack! Health: {player.health}")
+                else:
+                    print(f"{player.name} failed to dodge. Health: {player.health}")
+                    enemy.attack(player)
+            else:
+                enemy.attack(player)
+            time.sleep(1)
+        elif action == "special_attack":
+            if hasattr(enemy, "special_attack"):
+                enemy.special_attack(player)
+                time.sleep(1)
+                break
+            else:
+                continue
+
+        elif action == "heal":
+            enemy.heal()
+            time.sleep(1)
+            break
 
 
+def main():
+    print("Welcome to the Battle Game!\n")
+    while True:
+        world = input(f"Choose a world {worlds}: ")
+        if world not in worlds:
+            print("Invalid world. Try again.")
+        else:
+            break
 
-while True:
-    world1 = input(f"In which world would you want to figth {worlds}?")
-    if world1 not in worlds:
-        print("This world in not in choices.")
-        continue
+    name = input("Enter your character's name: ")
+    race = input("Enter your character's race: ")
+    RoleClass = select_role(world)
+    player = RoleClass(name, race)
 
+    enemies = get_enemies(world)
 
-    name = input("Write name for your character: ")
-    race = input("Write a race for your character: ")
-    RoleClass = select_role(world1)
-    player = 
-    break
-
-while True:
-    enemies = enemy(world1)
-    while enemies:
-        enemy_to_fight = random.choice(enemies)
-        enemy_to_fight =  Character(enemy_to_fight.name, enemy_to_fight.rasa, enemy_to_fight.health,
-                          enemy_to_fight.attack_range, enemy_to_fight.defence0, enemy_to_fight.damage)
-        print(f"Your opponent is: {enemy_to_fight.name} ({enemy_to_fight.rasa}), Health: {enemy_to_fight.health}")
-        print(f"Battle beggings!\n Your opponent is: {enemy_to_fight.name} ({enemy_to_fight.rasa}), Health: {enemy_to_fight.health}")
+    while enemies and player.health > 0:
+        enemy_template = random.choice(enemies)
+        enemy = Character(enemy_template.name, enemy_template.race, enemy_template.health, enemy_template.attack_range, enemy_template.defence, enemy_template.damage)
+        print(f"\nYour opponent is {enemy.name} ({enemy.race}) with {enemy.health} health.")
+        print("Battle begins!")
 
         while player.health > 0 and enemy.health > 0:
-            dodged = player_turn(player, enemy)
+            player_turn(player, enemy)
             if enemy.health <= 0:
-                print(f"{enemy.name} has been defeated!")
-                enemies.remove(enemy_to_fight)
+                print(f"{enemy.name} has been defeated!\n")
+                enemies.remove(enemy_template)
                 break
-
-            if not dodged:
-                enemy_turn(enemy, player)
-
+            enemy_turn(enemy, player)
             if player.health <= 0:
-                print(f"{player.name} has fallen in battle...")
-        if player.health <= 0:
-            print("Game over.")
-            break
-    if player.health <= 0 or not enemies:
-        print("You defeated all your enemies. You win.\n Thanks for playing my game.")
-        break
+                print(f"{player.name} has fallen in battle...\nGame over.")
+                return
+
+    if player.health > 0:
+        print(f"Congratulations {player.name}, you defeated all your enemies! Thanks for playing.")
+
+if __name__ == "__main__":
+    main()
