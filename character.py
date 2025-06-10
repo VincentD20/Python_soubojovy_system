@@ -12,9 +12,8 @@ class Character:
         self.is_parrying = False
 
     def attack(self, enemy):
-
         action_chance = random.randint(1, 100)
-        
+
         if action_chance <= 20:
             parry_chance = random.randint(1, 20)
             guess = random.randint(1, 20)
@@ -24,6 +23,13 @@ class Character:
                 return
             else:
                 print(f"{enemy.name} tried to parry but failed.")
+                dmg = random.randint(*self.attack_range) + self.damage
+                net_damage = dmg - enemy.defence
+                if net_damage < 0:
+                    net_damage = 0
+                enemy.health -= net_damage
+                print(f"{self.name} attacks {enemy.name} for {net_damage} damage!")
+
 
         elif 20 < action_chance <= 50:
             dodge_chance = random.randint(1, 100)
@@ -32,13 +38,20 @@ class Character:
                 return
             else:
                 print(f"{enemy.name} tried to dodge but failed.")
+                dmg = random.randint(*self.attack_range) + self.damage
+                net_damage = dmg - enemy.defence
+                if net_damage < 0:
+                    net_damage = 0
+                enemy.health -= net_damage
+                print(f"{self.name} attacks {enemy.name} for {net_damage} damage!")
+        else:
+            dmg = random.randint(*self.attack_range) + self.damage
+            net_damage = dmg - enemy.defence
+            if net_damage < 0:
+                net_damage = 0
+            enemy.health -= net_damage
+            print(f"{self.name} attacks {enemy.name} for {net_damage} damage!")
 
-        dmg = random.randint(*self.attack_range) + self.damage
-        net_damage = dmg - enemy.defence
-        if net_damage < 0:
-            net_damage = 0
-        enemy.health -= net_damage
-        print(f"{self.name} attacks {enemy.name} for {net_damage} damage!")
 
 
     
@@ -48,12 +61,14 @@ class Character:
         print(f"{self.name} heals for {heal_amount}. Current health: {self.health}")
     
     def parry(self):
-        chance  = random.randint(1, 20)
+        chance = random.randint(1, 20)
         guess = random.randint(1, 20)
         if chance == guess:
             self.is_parrying = True
+            return True
         else:
             self.is_parrying = False
+            return False
     
     def dodge(self):
         chance = random.randint(1, 100)

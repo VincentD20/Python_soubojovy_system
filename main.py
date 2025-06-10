@@ -60,20 +60,24 @@ def select_role(world):
 
 def player_turn(player, enemy):
     print(f"\n{player.name} - Choose your action:")
+    time.sleep(1)
     print("1 - Attack")
     print("2 - Special Attack")
     print("3 - Heal")
+    time.sleep(1)
 
     choice = input("Your choice: ")
+    time.sleep(1)
     if choice == "1":
         player.attack(enemy)
         time.sleep(1)
     elif choice == "2":
         if hasattr(player, "special_attack"):
             player.special_attack(enemy)
+            time.sleep(1)
         else:
             print("No special attack available.")
-        time.sleep(1)
+            time.sleep(1)
     elif choice == "3":
         player.heal()
         time.sleep(1)
@@ -83,6 +87,7 @@ def player_turn(player, enemy):
 
 def enemy_turn(enemy, player):
     print(f"\n{enemy.name}'s turn:")
+    time.sleep(1)
 
     actions = ["attack", "special_attack", "heal"]
 
@@ -90,7 +95,10 @@ def enemy_turn(enemy, player):
         action = random.choice(actions)
 
         if action == "attack":
+            print(f"{enemy.name} attacks {player.name}.")
+            time.sleep(1)
             print(f"{player.name}, you are about to be attacked! Choose your defense: ")
+            time.sleep(1)
             print("1 - Parry (chance to counterattack)")
             print("2 - Dodge (chance to avoid attack)")
 
@@ -98,21 +106,25 @@ def enemy_turn(enemy, player):
             if choice == "1":
                 if player.parry(): 
                     print(f"{player.name} parried successfully and counterattacks! Health: {player.health}")
+                    time.sleep(1)
                     player.attack(enemy)
                 else:
+                    time.sleep(1)
                     enemy.attack(player)
-                    print(f"{player.name} failed to parry.")
-                    enemy.attack(player)
+                    time.sleep(1)
 
             elif choice == "2":
                 if player.dodge():
                     print(f"{player.name} dodged the attack! Health: {player.health}")
+                    time.sleep(1)
                 else:
-                    print(f"{player.name} failed to dodge. Health: {player.health}")
+                    print(f"{player.name} failed to dodge.")
+                    time.sleep(1)
                     enemy.attack(player)
+                    time.sleep(1)
             else:
                 enemy.attack(player)
-            time.sleep(1)
+                time.sleep(1)
         elif action == "special_attack":
             if hasattr(enemy, "special_attack"):
                 enemy.special_attack(player)
@@ -125,6 +137,8 @@ def enemy_turn(enemy, player):
             enemy.heal()
             time.sleep(1)
             break
+
+
 
 
 def main():
@@ -146,22 +160,27 @@ def main():
     while enemies and player.health > 0:
         enemy_template = random.choice(enemies)
         enemy = Character(enemy_template.name, enemy_template.race, enemy_template.health, enemy_template.attack_range, enemy_template.defence, enemy_template.damage)
+        time.sleep(1)
         print(f"\nYour opponent is {enemy.name} ({enemy.race}) with {enemy.health} health.")
         print("Battle begins!")
+        time.sleep(1)
 
         while player.health > 0 and enemy.health > 0:
             player_turn(player, enemy)
             if enemy.health <= 0:
                 print(f"{enemy.name} has been defeated!\n")
+                time.sleep(1)
                 enemies.remove(enemy_template)
                 break
             enemy_turn(enemy, player)
             if player.health <= 0:
                 print(f"{player.name} has fallen in battle...\nGame over.")
+                time.sleep(1)
                 return
 
     if player.health > 0:
         print(f"Congratulations {player.name}, you defeated all your enemies! Thanks for playing.")
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
